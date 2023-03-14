@@ -2,7 +2,7 @@ from django.shortcuts import render
 import pandas as pd
 import numpy as np
 from sklearn.metrics.pairwise import cosine_similarity
-import numpy as np
+from django.contrib.auth.decorators import login_required
 
 from sklearn.feature_extraction.text import TfidfVectorizer
 
@@ -44,6 +44,9 @@ def find_similar_movies(movie_id):
 
     return rec_percentages.head(10).merge(MOVIES, left_index=True, right_on="movieId")[["title", "genres"]]    
 
+@login_required
+def index(request): 
+    return render (request, 'site/index.html' ,{}) 
 
 def search_results(request):
 
