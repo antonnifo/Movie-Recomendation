@@ -3,10 +3,11 @@ from django.contrib.auth.decorators import login_required
 from .forms import UserRegistrationForm, UserEditForm, ProfileEditForm
 from .models import Profile
 from django.contrib import messages
+from movie.models import Movie
 
 @login_required
-def dashboard(request):
-    return render(request, 'human/dashboard.html',{})
+def dashboard(request):   
+    return render(request, 'human/dashboard.html',{'movies':Movie.objects.all()[:10]})
 
 
 def register(request):
