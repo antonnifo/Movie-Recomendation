@@ -1,15 +1,15 @@
 JAZZMIN_SETTINGS = {
     # title of the window
-    'site_title': 'Movie Recommendation Admin',
+    'site_title': 'Movies Admin',
 
     # Title on the brand, and the login screen (19 chars max)
-    'site_header': 'Movie Recommendatione',
+    'site_header': 'Movie',
 
     # square logo to use for your site, must be present in static files, used for favicon and brand on top left
     'site_logo': 'images/logo/icon.png',
 
     # Welcome text on the login screen
-    'welcome_sign': 'Welcome to Movie Recommendatione',
+    'welcome_sign': 'Welcome to Movie Recommendation',
 
     # Copyright on the footer
     'copyright': 'Antonnifo',
