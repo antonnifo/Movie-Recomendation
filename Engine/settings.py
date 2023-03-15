@@ -34,6 +34,7 @@ INSTALLED_APPS = [
     'movie',
     'human',
     'social_django',
+    'jazzmin',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -108,7 +109,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Africa/Nairobi'
 
 USE_I18N = True
 
@@ -120,12 +121,15 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 
+MEDIA_ROOT = BASE_DIR / 'media/'
+MEDIA_URL = '/media/'
+
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-LOGIN_REDIRECT_URL = 'movie:home'
+LOGIN_REDIRECT_URL = 'dashboard'
 LOGIN_URL = 'login'
 LOGOUT_URL = 'logout'
 
@@ -151,3 +155,6 @@ SOCIAL_AUTH_TWITTER_SECRET = 'XXX' # Twitter API Secret
 
 SOCIAL_AUTH_FACEBOOK_KEY = 'XXX' # Facebook App ID
 SOCIAL_AUTH_FACEBOOK_SECRET = 'XXX' # Facebook App Secret
+
+
+from .jazmin_settings import *
