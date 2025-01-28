@@ -1,35 +1,36 @@
+{% extends "base.html" %}
+{% block title %}Cinemate{% endblock %}
 
-{% load static %}
-
-<!DOCTYPE HTML>
-<html>
-<head>
-<title>Recommend Movies</title>
-<!-- Custom Theme files -->
-<link href="{% static 'css/style.css' %}" rel="stylesheet" type="text/css" media="all"/>
-<!-- Custom Theme files -->
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" /> 
-<!--Google Fonts-->
-<link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
-<!--Google Fonts-->
-</head>
-<body>
-<!--search start here-->
-<div class="search">
-	<i> </i>
-	<div class="s-bar">
-	   <form method="post" action="{% url 'movie:search' %}">{% csrf_token %}
-		<input type="text" name="s" value="Movie You Liked" onfocus="this.value = '';" onblur="if (this.value == '') {this.value = 'Search Movie';}" required="">
-		<input type="submit"  value="Search"/>
-	  </form>
-	</div>
-	<p style="font-weight: bolder; color: green;">Type a movie you liked and get similar recommendation:</p> 
+{% block content %}
+<!-- Hero Section with Dark Background -->
+<div class="bg-dark text-white py-5">
+    <div class="container">
+        <h1 class="display-4 fw-bold">Type a Movie You Liked and Get Similar Recommendations</h1>
+        <p class="lead">Discover movies tailored to your tastes.</p>
+    </div>
 </div>
-<!--search end here-->	
-<div class="copyright">
-	 <p>2023 &copy  All rights reserved </p>
-</div>	
-</body>
-</html>
+
+<!-- Search Form Section -->
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <h2 class="card-title text-center mb-4">Find Movie Recommendations</h2>
+                    <p class="text-center text-success fw-bold">Type a movie you liked and get similar recommendations:</p>
+                    <form method="post" action="{% url 'movie:search' %}">
+                        {% csrf_token %}
+                        <div class="mb-3">
+                            <label for="searchInput" class="form-label visually-hidden">Search Movie</label>
+                            <input type="text" name="s" id="searchInput" class="form-control" placeholder="Enter a movie you liked" aria-label="Search Movie" required>
+                        </div>
+                        <div class="d-grid">
+                            <button class="btn btn-primary" type="submit">Search</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
