@@ -2,45 +2,58 @@
 {% block title %}Dashboard{% endblock %}
 
 {% block content %}
-    <h1>Dashboard</h1>
-    <p>Hello {{request.user.first_name }} Welcome to your dashboard.</p>
-    <p>You can <a href="{% url "edit" %}">edit your profile</a> or <a href="{% url "password_change" %}">change your password</a> 
-        or <a href="{% url "logout" %}">Logout</a></p>
+<div class="container mt-5">
+    <!-- Greeting Section -->
+    <div class="row mb-4">
+        <div class="col">
+            <h1 class="mb-3">Dashboard</h1>
+            <p class="lead">Hello, {{ request.user.first_name }}! Welcome to your dashboard.</p>
+            <div class="d-flex flex-wrap gap-2">
+                <a href="{% url 'edit' %}" class="btn btn-outline-primary">Edit Profile</a>
+                <a href="{% url 'password_change' %}" class="btn btn-outline-warning">Change Password</a>
+                <a href="{% url 'logout' %}" class="btn btn-outline-danger">Logout</a>
+            </div>
+            <div class="mt-3">
+                <a href="{% url 'movie:home' %}" class="btn btn-success">Search for a Recommendation</a>
+            </div>
+        </div>
+    </div>
 
-          <p><a href="{% url "movie:home" %}">Search for a recommendation</a> </p>
-
-    <h3> Our top 10 latest Films</h3>
-
-    <table class="table">
-        <thead>
-            <tr>
-                <th scope="col">#</th>
-                <th scope="col">Title</th>
-                <th scope="col">Genres</th>
-                <th scope="col">Year</th>
-                <th scope="col">Director</th>
-                <th scope="col">Updated</th>
-       
-            </tr>
-        </thead>
-        <tbody> 
-            {% for item in movies %}
-            <tr>
-                <th scope="row">{{forloop.counter}}</th>
-                <td>{{item.title}}</td>
-                <td>{{item.genres}}</td>
-                <td>{{item.year}}</td>
-                <td>{{item.director}}</td>
-                <td>{{item.updated}}</td>
-
-            </tr>
-            {% empty %}
-             <p>No films at the moment check back later</p>
-            {% endfor %}
-
-
-        </tbody>
-    </table>
-    
-    
+    <!-- Latest Films Section -->
+    <div class="row">
+        <div class="col">
+            <h3 class="mb-4">Our Top 10 Latest Films</h3>
+            <div class="table-responsive">
+                <table class="table table-hover table-striped">
+                    <thead class="table-dark">
+                        <tr>
+                            <th scope="col">#</th>
+                            <th scope="col">Title</th>
+                            <th scope="col">Genres</th>
+                            <th scope="col">Year</th>
+                            <th scope="col">Director</th>
+                            <th scope="col">Updated</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for item in movies %}
+                            <tr>
+                                <th scope="row">{{ forloop.counter }}</th>
+                                <td>{{ item.title }}</td>
+                                <td>{{ item.genres }}</td>
+                                <td>{{ item.year }}</td>
+                                <td>{{ item.director }}</td>
+                                <td>{{ item.updated|date:"M d, Y" }}</td>
+                            </tr>
+                        {% empty %}
+                            <tr>
+                                <td colspan="6" class="text-center">No films at the moment. Please check back later.</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
 {% endblock %}
