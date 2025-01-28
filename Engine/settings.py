@@ -10,10 +10,12 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.1/ref/settings/
 """
 
+from .jazmin_settings import *
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
+
 
 
 # Quick-start development settings - unsuitable for production
@@ -41,6 +43,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'crispy_forms',
 ]
 
 MIDDLEWARE = [
@@ -157,4 +160,4 @@ SOCIAL_AUTH_FACEBOOK_KEY = 'XXX' # Facebook App ID
 SOCIAL_AUTH_FACEBOOK_SECRET = 'XXX' # Facebook App Secret
 
 
-from .jazmin_settings import *
+CRISPY_TEMPLATE_PACK = 'bootstrap5'
