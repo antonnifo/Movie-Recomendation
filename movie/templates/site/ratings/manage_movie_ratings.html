@@ -1,7 +1,6 @@
-
 {% extends "base.html" %}
 {% load static %}
-{% block title %} Movies {% endblock title %}
+{% block title %}Movies{% endblock title %}
 
 {% block body %}
 
@@ -19,6 +18,7 @@
                     <ul class="breadcrumb">
                         <li class="breadcrumb-item"><a href="{% url "dashboard" %}">Dashboard</a></li>
                          <li class="breadcrumb-item"><a href="#">Movies</a></li>               
+                         <li class="breadcrumb-item">{{movie}}</li>               
                     </ul>
                 </div>
                 <div class="page-header-right ms-auto">
@@ -34,9 +34,9 @@
                                 <i class="feather-bar-chart"></i>
                             </a>
 
-                            <a href="{% url 'movie:home' %}" class="btn btn-primary">
+                            <a href="{% url "movie:rate_movie" movie.pk %}" class="btn btn-primary">
                                 <i class="feather-plus me-2"></i>
-                                <span>Search Again</span>
+                                <span>Rate {{movie}}</span>
                             </a>
         
                         </div>
@@ -60,8 +60,8 @@
                                 <div class="mb-5 d-flex align-items-center justify-content-between">
                                     <h5 class="fw-bold mb-0 me-4">
                                     
-                                        <span class="d-block mb-2">Other Movies Similar to "<strong>{{ query }}</strong>" </span>
-                                        <span class="fs-12 fw-normal text-muted text-truncate-1-line">General Movie Recommendations</span>
+                                        <span class="d-block mb-2">{{movie}}</span>
+                                        <span class="fs-12 fw-normal text-muted text-truncate-1-line">Ratings for {{movie}}</span>
                       
 
                                     </h5>
@@ -86,39 +86,46 @@
                                         <thead>
                                             <tr>
                                                 <th>Sr.No</th>
-                                                <th>Title</th>
-                                                <th>Release Date</th>
-                                                <th>IMDb URL</th>
-
-
-                        
+                                                <th>User</th>
+                                                <th>Rating</th>
+                                                <th>Review</th>
+                                                <th>Updated</th>
+                                                <th class="text-end">Actions</th>
                                             </tr>
                                         </thead>
                                         <tbody>
 
-                                             {% for index, row in movies.iterrows %}
+                                            {% for item in ratings %}
                                                 <tr class="single-item">
                                                     <td><a href="javascript:void(0);" class="fw-bold">{{forloop.counter}}</a></td>
-                                                    <td><a href="#" class="fw-bold text-dark">{{ row.title }}</a></td>
-                                                    <td>{{ row.release_date }}</td>
-                                                    <td>
-                                                      
-                                                            <a href="{{ row.IMDb_URL }}" target="_blank" class="avatar-text avatar-md">
-                                                                <i class="fa-solid fa-link"></i>
-                                                            </a>
-                                                       
-                                                    </td>
-                      
-
-
+                                                    <td><a href="#" class="fw-bold text-dark">{{item.user}}</a></td>
+                                                    <td>{{item.rating}}</td>
+                                                    <td>{{item.review}}</td>
+                                                    <td>{{item.updated}}</td>
                                                         
+                                                    <td>
+                                                        {% if item.user == request.user %}
+                                                            <div class="hstack gap-2 justify-content-end">
+                                                                <a href="{% url "movie:edit_rate_movie" item.pk %}" class="avatar-text avatar-md">
+                                                                    <i class="feather feather-edit-3"></i>
+                                                                </a>
+                                                            
+                                                                <a href="{% url "movie:delete_rate_movie" item.pk %}" class="avatar-text avatar-md">
+                                                                    <i class="feather feather-trash-2"></i>
+                                                                </a>
+                                                            
+                                                            </div>
+                                                        {% endif %}
+                                                    </td>
                                                 
                                                 </tr>
                                             {% empty %}
                                             <tr>
-                                                <td colspan="8" class="text-center">We do not have a recommendation for "<strong>{{ query }}</strong>" at the moment. Please check back later.</td>
+                                                <td colspan="8" class="text-center">The film {{movie}} has no ratings as of now, if you have watched please rate it</td>
                                             </tr>
                                             {% endfor %}
+
+
 
                                         </tbody>
                                     </table>

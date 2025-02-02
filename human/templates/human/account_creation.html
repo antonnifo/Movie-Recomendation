@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome to HerdMaster</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            margin: 0;
+            padding: 0;
+        }
+        .email-container {
+            max-width: 600px;
+            margin: 20px auto;
+            background-color: #ffffff;
+            border: 1px solid #dddddd;
+            border-radius: 5px;
+            overflow: hidden;
+        }
+        .email-header {
+            background-color: #007bff;
+            color: white;
+            padding: 20px;
+            text-align: center;
+            font-size: 24px;
+        }
+        .email-body {
+            padding: 20px;
+            color: #333333;
+        }
+        .email-body p {
+            line-height: 1.6;
+        }
+        .email-body a {
+            display: inline-block;
+            background-color: #007bff;
+            color: white;
+            padding: 10px 15px;
+            text-decoration: none;
+            border-radius: 5px;
+            font-size: 16px;
+            margin-top: 10px;
+        }
+        .email-footer {
+            background-color: #f9f9f9;
+            color: #777777;
+            text-align: center;
+            padding: 10px;
+            font-size: 12px;
+            border-top: 1px solid #dddddd;
+        }
+    </style>
+</head>
+<body>
+<div class="email-container" style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; color: #333;">
+    <div class="email-header" style="background-color: #f5f5f5; padding: 20px; text-align: center; font-size: 24px; font-weight: bold;">
+        Welcome to HerdMaster
+    </div>
+    <div class="email-body" style="padding: 20px; line-height: 1.6;">
+        <p>Hello {{ username }},</p>
+        <p>
+            Your HerdMaster account has been successfully created! You can now access our platform using the following credentials:
+        </p>
+        <ul style="list-style-type: none; padding: 0;">
+            <li><strong>Username:</strong> {{ username }}</li>
+            <li><strong>Password:</strong> {{ password }}</li>
+        </ul>
+        <p>
+            To log in to your account, please click the button below:
+        </p>
+        <p style="text-align: center; margin: 20px 0;">
+            <a href="{{ login_link }}" style="display: inline-block; padding: 12px 20px; background-color: #3498db; color: #ffffff; text-decoration: none; border-radius: 4px; font-size: 16px;">Log In to Your Account</a>
+        </p>
+        <p>
+            If the button above is not clickable, copy and paste the following link into your browser:
+        </p>
+        <p style="word-wrap: break-word; font-family: monospace; background-color: #f9f9f9; padding: 10px; border-radius: 5px; color: #555555;">
+            {{ login_link }}
+        </p>
+        <p>
+            For security reasons, we strongly recommend that you change your password immediately after logging in. If you did not request this account, please disregard this email.
+        </p>
+        <p>Thank you for joining HerdMaster!</p>
+    </div>
+    <div class="email-footer" style="background-color: #f5f5f5; padding: 20px; text-align: center; font-size: 14px; color: #999999;">
+        &copy; {{ current_year }} HerdMaster. All rights reserved.
+    </div>
+</div>
+</body>
+</html>

@@ -1,7 +1,6 @@
-
 {% extends "base.html" %}
 {% load static %}
-{% block title %} Movies {% endblock title %}
+{% block title %}Movies{% endblock title %}
 
 {% block body %}
 
@@ -34,9 +33,9 @@
                                 <i class="feather-bar-chart"></i>
                             </a>
 
-                            <a href="{% url 'movie:home' %}" class="btn btn-primary">
+                            <a href="{% url "movie:add_movies" %}" class="btn btn-primary">
                                 <i class="feather-plus me-2"></i>
-                                <span>Search Again</span>
+                                <span>Add a Movie</span>
                             </a>
         
                         </div>
@@ -60,8 +59,8 @@
                                 <div class="mb-5 d-flex align-items-center justify-content-between">
                                     <h5 class="fw-bold mb-0 me-4">
                                     
-                                        <span class="d-block mb-2">Other Movies Similar to "<strong>{{ query }}</strong>" </span>
-                                        <span class="fs-12 fw-normal text-muted text-truncate-1-line">General Movie Recommendations</span>
+                                        <span class="d-block mb-2">Movies</span>
+                                        <span class="fs-12 fw-normal text-muted text-truncate-1-line">General Movie management</span>
                       
 
                                     </h5>
@@ -87,38 +86,54 @@
                                             <tr>
                                                 <th>Sr.No</th>
                                                 <th>Title</th>
-                                                <th>Release Date</th>
-                                                <th>IMDb URL</th>
-
-
-                        
+                                                <th>Genres</th>
+                                                <th>Year</th>
+                                                <th>Actors</th>
+                                                <th>Director(s)</th>
+                                                <th>Rating</th>
+                                                <th>Updated</th>
+                                                <th class="text-end">Actions</th>
                                             </tr>
                                         </thead>
                                         <tbody>
 
-                                             {% for index, row in movies.iterrows %}
+                                            {% for item in movies %}
                                                 <tr class="single-item">
                                                     <td><a href="javascript:void(0);" class="fw-bold">{{forloop.counter}}</a></td>
-                                                    <td><a href="#" class="fw-bold text-dark">{{ row.title }}</a></td>
-                                                    <td>{{ row.release_date }}</td>
+                                                    <td><a href="#" class="fw-bold text-dark">{{item.title}}</a></td>
+                                                    <td>{{item.genres}}</td>
+                                                    <td>{{item.year}}</td>
+                                                    <td>{{item.actors}}</td>
+                                                    <td>{{item.director}}</td>
+                                                    
                                                     <td>
-                                                      
-                                                            <a href="{{ row.IMDb_URL }}" target="_blank" class="avatar-text avatar-md">
-                                                                <i class="fa-solid fa-link"></i>
-                                                            </a>
-                                                       
+                                                        <a href="{% url "movie:manage_movie_ratings" item.pk %}" class="fw-bold text-dark">{{item.average_rating}}</a>        
                                                     </td>
-                      
-
-
+                                                    <td>{{item.updated}}</td>
                                                         
+                                                    <td>
+                                                        {% if item.added_by == request.user %}
+                                                            <div class="hstack gap-2 justify-content-end">
+                                                                <a href="{% url "movie:edit_movies" item.pk %}" class="avatar-text avatar-md">
+                                                                    <i class="feather feather-edit-3"></i>
+                                                                </a>
+                                                            
+                                                                    <a href="{% url "movie:delete_movies" item.pk %}" class="avatar-text avatar-md">
+                                                                        <i class="feather feather-trash-2"></i>
+                                                                    </a>
+                                                            
+                                                            </div>
+                                                        {% endif %}
+                                                    </td>
                                                 
                                                 </tr>
                                             {% empty %}
                                             <tr>
-                                                <td colspan="8" class="text-center">We do not have a recommendation for "<strong>{{ query }}</strong>" at the moment. Please check back later.</td>
+                                                <td colspan="8" class="text-center">No movies at the momemt, please contribute one</td>
                                             </tr>
                                             {% endfor %}
+
+
 
                                         </tbody>
                                     </table>
