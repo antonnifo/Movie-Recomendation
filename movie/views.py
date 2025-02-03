@@ -122,7 +122,7 @@ def search_results(request):
     }
     return render(request, 'site/results.html', context)
 
-
+@login_required
 def manage_movies(request):
     movies  = Movie.objects.prefetch_related('favorited_by').all()
     context = {
@@ -131,7 +131,7 @@ def manage_movies(request):
     return render(request, 'site/manage_movies.html', context)
 
 
-
+@login_required
 def add_movie(request):
 
     if request.method == "POST":
@@ -140,8 +140,7 @@ def add_movie(request):
             movie = form.save(commit=False)
             movie.added_by = request.user
             movie.save()
-            messages.success(request, f"You have added {\
-                             movie} Thank you")
+            messages.success(request, f"You have added {movie} Thank you")
             return redirect('movie:manage_movies')
         else:
             messages.error(
@@ -157,7 +156,7 @@ def add_movie(request):
     return render(request, 'site/add_movie.html', context)
 
 
-
+@login_required
 def edit_movie(request, pk):
     movie = get_object_or_404(Movie, pk=pk)
 
@@ -183,7 +182,7 @@ def edit_movie(request, pk):
     return render(request, 'site/add_movie.html', context)
 
 
-
+@login_required
 def delete_movie(request, pk):
     movie = get_object_or_404(Movie, pk=pk)
 
@@ -196,7 +195,7 @@ def delete_movie(request, pk):
 
 
 
-
+@login_required
 def manage_movie_ratings(request,pk):
     movie = get_object_or_404(Movie, pk=pk)
     ratings = movie.movie_reviews.filter(is_active=True)
@@ -209,7 +208,7 @@ def manage_movie_ratings(request,pk):
     return render(request, 'site/ratings/manage_movie_ratings.html', context)
 
 
-
+@login_required
 def rate_movie(request, pk):
     movie = get_object_or_404(Movie, pk=pk)
 
@@ -236,7 +235,7 @@ def rate_movie(request, pk):
     return render(request, 'site/ratings/rate_movie.html', context)
 
 
-
+@login_required
 def edit_movie_rating(request, pk):
     rating = get_object_or_404(MovieReview, pk=pk)
     movie = rating.movie
@@ -263,6 +262,7 @@ def edit_movie_rating(request, pk):
 
     return render(request, 'site/ratings/rate_movie.html', context) 
 
+@login_required
 def delete_movie_rating(request, pk):
     review = get_object_or_404(MovieReview, pk=pk)
     movie = review.movie
