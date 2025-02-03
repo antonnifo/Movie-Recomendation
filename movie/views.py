@@ -1,11 +1,16 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.http import HttpRequest
 import numpy as np
 import pandas as pd
 from sklearn.metrics.pairwise import cosine_similarity
 from .apps import MovieConfig
+from django.http import HttpResponseRedirect    
 
+
+from django.contrib import messages
+from .models import Movie, MovieReview
+from .forms import MovieForm, MovieReviewForm
 
 from . import helpers
 
@@ -116,3 +121,178 @@ def search_results(request):
         'movies': recommended_movies,
     }
     return render(request, 'site/results.html', context)
+
+
+def manage_movies(request):
+    movies  = Movie.objects.prefetch_related('favorited_by').all()
+    context = {
+        'movies': movies,
+    }
+    return render(request, 'site/manage_movies.html', context)
+
+
+
+def add_movie(request):
+
+    if request.method == "POST":
+        form = MovieForm(request.POST)
+        if form.is_valid():
+            movie = form.save(commit=False)
+            movie.added_by = request.user
+            movie.save()
+            messages.success(request, f"You have added {\
+                             movie} Thank you")
+            return redirect('movie:manage_movies')
+        else:
+            messages.error(
+                request, "There was an error with your submission. Please check the form and try again."
+            )
+    else:
+        form = MovieForm()
+
+    context = {
+        'form': form,
+
+    }
+    return render(request, 'site/add_movie.html', context)
+
+
+
+def edit_movie(request, pk):
+    movie = get_object_or_404(Movie, pk=pk)
+
+    if request.method == 'POST':
+        form = MovieForm(request.POST, instance=movie)
+        if form.is_valid():
+            form.save()
+            messages.success(
+                request, f"You have successfully updated film {movie}.")
+            return redirect('movie:manage_movies')
+        else:
+            # Add error message for clarity
+            messages.error(
+                request, "There was an error with your submission. Please check the form and correct any issues.")
+    else:
+        form = MovieForm(instance=movie)
+
+    context = {
+        'form': form,
+        'movie': movie,
+        }
+
+    return render(request, 'site/add_movie.html', context)
+
+
+
+def delete_movie(request, pk):
+    movie = get_object_or_404(Movie, pk=pk)
+
+    if request.method == "POST":
+        movie.delete()
+        messages.info(request, f"You have deleted the film {movie}")
+        return redirect('movie:manage_movies')
+
+    return render(request, 'site/delete_movie.html', {'object': movie})
+
+
+
+
+def manage_movie_ratings(request,pk):
+    movie = get_object_or_404(Movie, pk=pk)
+    ratings = movie.movie_reviews.filter(is_active=True)
+
+    context = {
+        'movie': movie,
+        'ratings': ratings,
+    }
+
+    return render(request, 'site/ratings/manage_movie_ratings.html', context)
+
+
+
+def rate_movie(request, pk):
+    movie = get_object_or_404(Movie, pk=pk)
+
+    if request.method == "POST":
+        form = MovieReviewForm(request.POST)
+        if form.is_valid():
+            review = form.save(commit=False)
+            review.user = request.user
+            review.movie = movie
+            review.save()
+            messages.success(request, f"You have rated the film {movie} Thank you")
+            return redirect('movie:manage_movie_ratings', pk=pk)
+        else:
+            messages.error(
+                request, "There was an error with your submission. Please check the form and try again."
+            )
+    else:
+        form = MovieReviewForm()
+
+    context = {
+        'form': form,
+        'movie': movie,
+    }
+    return render(request, 'site/ratings/rate_movie.html', context)
+
+
+
+def edit_movie_rating(request, pk):
+    rating = get_object_or_404(MovieReview, pk=pk)
+    movie = rating.movie
+
+    if request.method == 'POST':
+        form = MovieReviewForm(request.POST, instance=rating)
+        if form.is_valid():
+            form.save()
+            messages.success(
+                request, f"You have successfully updated rating for film {movie}.")
+            return redirect('movie:manage_movie_ratings', pk=movie.pk)
+        else:
+            # Add error message for clarity
+            messages.error(
+                request, "There was an error with your submission. Please check the form and correct any issues.")
+    else:
+        form = MovieReviewForm(instance=rating)
+
+    context = {
+        'form': form,
+        'movie': movie,
+        'rating': rating
+        }
+
+    return render(request, 'site/ratings/rate_movie.html', context) 
+
+def delete_movie_rating(request, pk):
+    review = get_object_or_404(MovieReview, pk=pk)
+    movie = review.movie
+
+    if request.method == "POST":
+        review.delete()
+        messages.info(request, f"You have deleted  your review for film {movie}")
+        return redirect('movie:manage_movie_ratings', pk=movie.pk)
+
+    return render(request, 'site/ratings/delete_rating.html', {'object': review})    
+
+@login_required
+def toggle_favorite(request, movie_pk):
+    """
+    Toggle the favorite status of a movie for the logged-in user.
+    """
+    movie = get_object_or_404(Movie, pk=movie_pk)
+    user = request.user
+
+    if user in movie.favorited_by.all():
+        movie.favorited_by.remove(user)
+        messages.info(request, f"Removed '{movie.title}' from your favorites.")
+    else:
+        movie.favorited_by.add(user)
+        messages.success(request, f"Added '{movie.title}' to your favorites.")
+
+    # Redirect back to the page the user came from, if available.
+    next_url = request.GET.get('next', None)
+    if next_url:
+        return redirect(next_url)
+    else:
+        # Fallback to a default view, e.g., the movie list page.
+        return HttpResponseRedirect(reverse('movie:movie_list'))    

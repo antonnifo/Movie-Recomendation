@@ -112,18 +112,29 @@
                                                     <td>{{item.updated}}</td>
                                                         
                                                     <td>
-                                                        {% if item.added_by == request.user %}
+                                                        
                                                             <div class="hstack gap-2 justify-content-end">
-                                                                <a href="{% url "movie:edit_movies" item.pk %}" class="avatar-text avatar-md">
-                                                                    <i class="feather feather-edit-3"></i>
+
+                                                                {# Favoriting Icon Link - toggles favorite status #}
+                                                                <a href="{% url 'movie:favorite_toggle' item.pk %}?next={{ request.path }}" class="avatar-text avatar-md">
+                                                                    {% if request.user.is_authenticated and request.user in item.favorited_by.all %}
+                                                                        <i class="fa-solid fa-heart" style="color: #e63946;"></i>
+                                                                    {% else %}
+                                                                        <i class="fa-regular fa-heart"></i>
+                                                                    {% endif %}
                                                                 </a>
-                                                            
+
+                                                                {% if item.added_by == request.user %}
+                                                                    <a href="{% url "movie:edit_movies" item.pk %}" class="avatar-text avatar-md">
+                                                                        <i class="feather feather-edit-3"></i>
+                                                                    </a>
                                                                     <a href="{% url "movie:delete_movies" item.pk %}" class="avatar-text avatar-md">
                                                                         <i class="feather feather-trash-2"></i>
                                                                     </a>
+                                                                {% endif %}
                                                             
                                                             </div>
-                                                        {% endif %}
+                                                        
                                                     </td>
                                                 
                                                 </tr>
