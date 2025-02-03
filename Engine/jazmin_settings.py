@@ -6,7 +6,7 @@ JAZZMIN_SETTINGS = {
     'site_header': 'Movie',
 
     # square logo to use for your site, must be present in static files, used for favicon and brand on top left
-    'site_logo': 'images/logo/icon.png',
+    'site_logo': 'images/logo-abbr.png',
 
     # Welcome text on the login screen
     'welcome_sign': 'Welcome to Movie Recommendation',
