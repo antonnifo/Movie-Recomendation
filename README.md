@@ -109,7 +109,7 @@ Movie-Recommendation/
 3. **Create a virtual environment:**
     ```powershell
     python -m venv .venv
-    .venv\Scriptsctivate
+    .venv\Scripts\activate
     ```
 
 4. **Install dependencies:**
