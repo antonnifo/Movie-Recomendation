@@ -6,7 +6,7 @@ import pandas as pd
 from sklearn.metrics.pairwise import cosine_similarity
 from .apps import MovieConfig
 from django.http import HttpResponseRedirect    
-
+from django.db.models import Count
 
 from django.contrib import messages
 from .models import Movie, MovieReview
@@ -296,3 +296,32 @@ def toggle_favorite(request, movie_pk):
     else:
         # Fallback to a default view, e.g., the movie list page.
         return HttpResponseRedirect(reverse('movie:movie_list'))    
+
+
+@login_required
+def dashboard(request):   
+    user = request.user
+
+    # 1. Most Favorited Movies
+    most_favorite_movies = (
+        Movie.objects
+             .annotate(num_favorites=Count('favorited_by'))
+             .order_by('-num_favorites')[:5]  # adjust slice as needed
+    )
+ 
+
+    # 2. Movies the Logged-In User Has Favorited
+    user_favorite_movies = user.favorite_movies.all()
+
+
+    # 3. Movies the Logged-In User Has Added
+    user_added_movies = Movie.objects.filter(added_by=user)
+
+
+    context = {
+        'most_favorite_movies': most_favorite_movies,
+        'user_favorite_movies': user_favorite_movies,
+        'user_added_movies': user_added_movies,
+    }
+
+    return render(request, 'human/dashboard.html', context)        

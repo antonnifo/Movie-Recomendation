@@ -5,9 +5,7 @@ from .models import Profile
 from django.contrib import messages
 from movie.models import Movie
 
-@login_required
-def dashboard(request):   
-    return render(request, 'human/dashboard.html',{'movies':Movie.objects.all()[:10]})
+
 
 
 def register(request):

@@ -6,7 +6,8 @@ app_name = 'movie'
 
 urlpatterns = [
      # path('', TemplateView.as_view(template_name="site/index.html"), name='home'),
-     path('', views.index, name='home'),
+     path('', views.dashboard, name="dashboard"),
+     path('search/', views.index, name='home'),
      path('results/', views.search_results, name='search'),
      path('movies/', views.manage_movies, name='manage_movies'),
      path('movies/add/', views.add_movie, name='add_movies'),
